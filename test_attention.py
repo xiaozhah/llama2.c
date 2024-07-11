@@ -146,9 +146,13 @@ def test_attention():
     
     # Precompute frequency tables for rotary embeddings
     freqs_cos, freqs_sin = precompute_freqs_cis(args.dim // args.n_heads, args.max_seq_len)
-    
+    freqs_cos = freqs_cos[:seq_len]
+    freqs_sin = freqs_sin[:seq_len]
+
     # Forward pass
-    output = attention(x, freqs_cos[:seq_len], freqs_sin[:seq_len])
+    print("Input shape:", x.shape, freqs_cos.shape, freqs_sin.shape)
+    output = attention(x, freqs_cos, freqs_sin)
+    print("Output shape:", output.shape)
     
     # Check output shape
     expected_shape = (batch_size, seq_len, args.dim)
